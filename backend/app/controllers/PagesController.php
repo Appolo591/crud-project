@@ -1,0 +1,8 @@
+<?php 
+    function homePage(){
+
+        render
+
+   
+    
+};
