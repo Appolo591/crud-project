@@ -1,0 +1,10 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Force le footer en bas si la page est courte */
+}
+
+.content {
+  flex: 1; /* Prend tout l'espace disponible entre nav et footer */
+  padding: 20px;
+}

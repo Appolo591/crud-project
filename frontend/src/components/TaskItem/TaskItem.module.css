@@ -1,0 +1,56 @@
+.taskItem{
+    
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    box-shadow: #201e1e 0px 0px 10px;
+    transition: all 0.2s ease-in-out;
+    background-color: rgb(173, 248, 210);
+    margin-left: 10px;
+    margin-right: 10px;
+    align-content: space-between;
+    align-self: center;
+    min-width: 15%;
+    text-align: center;
+    width: 20vw;
+    box-sizing: content-box;
+    
+
+}
+
+.taskItem:hover{
+    box-shadow: #201e1e 0px 0px 20px;
+    cursor: pointer;
+    transform: scale(1.1);
+    box-shadow: #9e0909 0px 0px 20px;
+}
+
+.taskItem strong{
+    color: #9e0909;
+    font-weight: bold;
+    font-size: 20px;
+    text-transform: uppercase;
+}
+
+p{
+    font-weight: bold;
+}
+
+.taskLinkWrapper {
+  text-decoration: none; /* Enlève le soulignement */
+  color: inherit;        /* Garde la couleur de texte définie dans taskItem */
+  display: block;        /* Important pour que le lien prenne toute la largeur */
+}
+
+/* On déplace l'effet de survol du li vers le wrapper ou on garde le li 
+   mais assure-toi que le curseur pointer est bien visible */
+.taskItem {
+  cursor: pointer;
+  /* ... tes styles précédents ... */
+}
+
+.taskInfo{
+  font-weight: bold;
+  color: #3785ae;
+  font-size: 13px;
+}

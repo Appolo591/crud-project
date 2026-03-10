@@ -1,0 +1,12 @@
+/* Le conteneur qui enveloppe tous les items */
+.taskList {
+  list-style: none;         /* Enlève les points noirs par défaut */
+  padding: 0;               /* Aligne parfaitement à gauche */
+  margin: 20px auto;        /* Centre la liste horizontalement */
+  display: flex;    
+  align-items: center;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+
+  
+}
