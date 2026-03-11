@@ -50,7 +50,6 @@ function EditTask() {
         <label>Statut :</label>
         <select value={status} onChange={(e) => setStatus(e.target.value)}>
           <option value="pending">En attente</option>
-          <option value="in_progress">En cours</option>
           <option value="completed">Terminé</option>
         </select>
         

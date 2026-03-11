@@ -50,19 +50,7 @@ switch ($method) {
         $conn->query($sql);
         echo json_encode(["message" => "Tâche créée"]);
         break;
-    // case 'PUT':
-    //     // Mettre à jour une tâche existante
-    //     $data = json_decode(file_get_contents('php://input'), true);
-    //     $id = $data['id'];
-    //     $title = $data['title'];
-    //     $description = $data['description'];  // ajout
-    //     $due_date = $data['due_date'];  // ajout
-    //     $status = $data['status'];
-    //     $priority = $data['priority'];  // ajout
-    //     $sql = "UPDATE tasks SET title = '$title', description = '$description', due_date = '$due_date', status = '$status', priority = '$priority' WHERE id = $id";
-    //     $conn->query($sql);
-    //     echo json_encode(["message" => "Tâche mise à jour"]);
-    //     break;
+
     case 'PUT':
     // On récupère l'ID dans l'URL et les données dans le corps de la requête
     $id = intval($_GET['id']);
