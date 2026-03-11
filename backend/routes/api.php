@@ -39,7 +39,7 @@ switch ($method) {
     case 'POST':
         // Ajouter une nouvelle tâche
         $data = json_decode(file_get_contents('php://input'), true);
-        
+
         $title = $conn->real_escape_string($data['title']);
         $description = $conn->real_escape_string($data['description']);
         $due_date = $conn->real_escape_string($data['due_date']);
@@ -50,19 +50,48 @@ switch ($method) {
         $conn->query($sql);
         echo json_encode(["message" => "Tâche créée"]);
         break;
+    // case 'PUT':
+    //     // Mettre à jour une tâche existante
+    //     $data = json_decode(file_get_contents('php://input'), true);
+    //     $id = $data['id'];
+    //     $title = $data['title'];
+    //     $description = $data['description'];  // ajout
+    //     $due_date = $data['due_date'];  // ajout
+    //     $status = $data['status'];
+    //     $priority = $data['priority'];  // ajout
+    //     $sql = "UPDATE tasks SET title = '$title', description = '$description', due_date = '$due_date', status = '$status', priority = '$priority' WHERE id = $id";
+    //     $conn->query($sql);
+    //     echo json_encode(["message" => "Tâche mise à jour"]);
+    //     break;
     case 'PUT':
-        // Mettre à jour une tâche existante
-        $data = json_decode(file_get_contents('php://input'), true);
-        $id = $data['id'];
-        $title = $data['title'];
-        $description = $data['description'];  // ajout
-        $due_date = $data['due_date'];  // ajout
-        $status = $data['status'];
-        $priority = $data['priority'];  // ajout
-        $sql = "UPDATE tasks SET title = '$title', description = '$description', due_date = '$due_date', status = '$status', priority = '$priority' WHERE id = $id";
-        $conn->query($sql);
-        echo json_encode(["message" => "Tâche mise à jour"]);
-        break;
+    // On récupère l'ID dans l'URL et les données dans le corps de la requête
+    $id = intval($_GET['id']);
+    $data = json_decode(file_get_contents('php://input'), true);
+
+    if ($id > 0 && isset($data['title'])) {
+        $title = $conn->real_escape_string($data['title']);
+        $description = $conn->real_escape_string($data['description']);
+        $due_date = $conn->real_escape_string($data['due_date']);
+        $status = $conn->real_escape_string($data['status']);
+        $priority = $conn->real_escape_string($data['priority']);
+
+        $sql = "UPDATE tasks SET 
+                title = '$title', 
+                description = '$description', 
+                due_date = '$due_date', 
+                status = '$status', 
+                priority = '$priority',
+                updated_at = NOW() 
+                WHERE id = $id";
+
+        if ($conn->query($sql)) {
+            echo json_encode(["message" => "Tâche mise à jour"]);
+        } else {
+            http_response_code(500);
+            echo json_encode(["error" => $conn->error]);
+        }
+    }
+    break;
     case 'DELETE':
         // On récupère l'ID (soit dans l'URL ?id=123, soit via les paramètres)
         if (isset($_GET['id'])) {

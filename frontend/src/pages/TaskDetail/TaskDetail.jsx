@@ -46,7 +46,7 @@ function TaskDetail() {
       <p><small>Créée le : {task.created_at}</small></p>
       
       <div style={{ marginTop: '20px', display: 'flex', gap: '10px' }}>
-        <button className="btn btn-primary">Modifier</button>
+        <Link to={`/edit/${task.id}`} className="btn btn-primary">Modifier</Link>
         <button 
           onClick={handleDelete} 
           className="btn btn-danger"
