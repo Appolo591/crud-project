@@ -2,17 +2,30 @@
 import { useState, useEffect } from 'react';
 import TaskList from '../../components/TaskList/TaskList';
 import styles from './Home.module.css';
-import { Link } from 'react-router-dom';
-
+import { useNavigate, Link } from 'react-router-dom';
 
 function Home() {
   const [tasks, setTasks] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    fetch('http://localhost/crud-project/backend/routes/api.php')
+    const token = localStorage.getItem('userToken');
+
+    if (!token) {
+        navigate('/login'); 
+    return;
+    }
+
+    fetch('http://localhost/crud-project/backend/routes/api.php', {
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+  }
+})
       .then(res => res.json())
-      .then(data => setTasks(data));
-  }, []);
+      .then(data => setTasks(data))
+      .catch(err => console.error(err));
+  }, [navigate]);
 
   return (
     <>

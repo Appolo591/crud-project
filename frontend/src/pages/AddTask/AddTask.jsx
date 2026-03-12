@@ -9,33 +9,50 @@ function AddTask() {
   const [priority, setPriority] = useState('low');
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
-    console.log("Tentative d'envoi du formulaire...");
-    e.preventDefault(); // Empêche le rechargement de la page
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    // 1. Récupération du token depuis le localStorage
+    const token = localStorage.getItem('userToken');
 
     const newTask = { 
         title, 
         description,
-        due_date: dueDate, 
+        due_date: dueDate || null, // On s'assure d'envoyer null si la date est vide
         priority,
         status: 'pending' 
     };
 
+    // 2. Envoi avec le header Authorization
     fetch('http://localhost/crud-project/backend/routes/api.php', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}` // ✅ AJOUT CRUCIAL
+      },
       body: JSON.stringify(newTask),
     })
-    .then(res => res.json())
+    .then(async res => {
+      const data = await res.json();
+      if (!res.ok) {
+        // Si PHP renvoie une erreur (ex: token invalide)
+        throw new Error(data.message || 'Erreur lors de l ajout');
+      }
+      return data;
+    })
     .then(data => {
       console.log('Succès:', data);
-      navigate('/'); // Retour à l'accueil pour voir la nouvelle tâche
+      navigate('/'); 
     })
-    .catch(err => console.error('Erreur:', err));
+    .catch(err => {
+      console.error('Erreur:', err);
+      alert(err.message);
+    });
   };
 
-return (
+  return (
     <div className={styles.container}>
+      <h2>Nouvelle Tâche</h2>
       <form onSubmit={handleSubmit} className={styles.form}>
         <input type="text" placeholder="Titre" value={title} onChange={(e) => setTitle(e.target.value)} required />
         
@@ -43,6 +60,7 @@ return (
         
         <label>Date d'échéance :</label>
         <input type="date" value={dueDate} onChange={(e) => setDueDate(e.target.value)} />
+        
         <label>Priorité :</label>
         <select value={priority} onChange={(e) => setPriority(e.target.value)}>
           <option value="low">Basse</option>
