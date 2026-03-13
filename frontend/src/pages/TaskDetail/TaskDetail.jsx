@@ -1,14 +1,21 @@
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, Link , useNavigate} from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import styles from './TaskDetail.module.css';
 
 function TaskDetail() {
   const { id } = useParams(); 
-  const navigate = useNavigate(); // Indispensable pour rediriger après suppression
   const [task, setTask] = useState(null);
+  const navigate = useNavigate();
 
   // Récupération des données
   useEffect(() => {
-    fetch(`http://localhost/crud-project/backend/routes/api.php?id=${id}`)
+    const token = localStorage.getItem('userToken');
+
+    fetch(`http://localhost/crud-project/backend/routes/api.php?id=${id}`,{
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`
+    }})
       .then(res => res.json())
       .then(data => {
         console.log("Données reçues du PHP :", data);
@@ -18,39 +25,47 @@ function TaskDetail() {
   }, [id]);
 
   // --- LA FONCTION DE SUPPRESSION ---
-  const handleDelete = () => {
-    if (window.confirm("Voulez-vous vraiment supprimer cette tâche ?")) {
-      fetch(`http://localhost/crud-project/backend/routes/api.php?id=${id}`, {
+  const handleDelete = async (taskId) => {
+    if (!window.confirm("Voulez-vous vraiment supprimer cette tâche ?"))
+        return;
+    const token = localStorage.getItem('userToken');
+    try{
+      const response = await fetch(`http://localhost/crud-project/backend/routes/api.php?id=${id}`, {
         method: 'DELETE',
-      })
-      .then(res => {
-        if (res.ok) {
+        headers: {'Authorization': `Bearer ${token}`}
+      });
+    const result = await response.json();  
+        if (response.ok) {
           alert("Tâche supprimée !");
-          navigate('/'); // On retourne à la liste
+        // Ici, rafraîchis ta liste de tâches (ex: filtrer l'état local ou re-fetch)
+        setTask(prevTasks => prevTasks.filter(t => t.id !== taskId));
+        navigate('/');
         } else {
-          alert("Erreur lors de la suppression.");
+          alert("Erreur du serveur : " + (result.message || "Impossible de supprimer"));
         }
-      })
-      .catch(err => console.error("Erreur API:", err));
+    } catch(err) {
+        console.error("Erreur API:", err);
+        alert("Impossible de supprimer la tâche.");
     }
   };
 
   if (!task) return <p>Chargement...</p>;
 
   return (
-    <div style={{ padding: '20px' }}>
-      <Link to="/">← Retour à la liste</Link>
+    <div className={styles.headerActions}>
+    <Link to="/" className={styles.backLink}>
+        <span className={styles.arrow}>←</span> Retour à la liste
+    </Link>
       <h1>{task.title}</h1>
       <hr />
       <p><strong>Description :</strong> {task.description}</p>
       <p><small>Créée le : {task.created_at}</small></p>
       
-      <div style={{ marginTop: '20px', display: 'flex', gap: '10px' }}>
-        <Link to={`/edit/${task.id}`} className="btn btn-primary">Modifier</Link>
+      <div className ={styles.actions}>
+        <Link to={`/edit/${task.id}`} className={`${styles.btn} ${styles.btnPrimary}`}>Modifier</Link>
         <button 
-          onClick={handleDelete} 
-          className="btn btn-danger"
-          style={{ backgroundColor: '#e74c3c', color: 'white', border: 'none', padding: '8px 15px', borderRadius: '4px', cursor: 'pointer' }}
+          onClick={() => handleDelete(task.id)}
+          className={`${styles.btn} ${styles.btnDanger}`}
         >
           Supprimer
         </button>

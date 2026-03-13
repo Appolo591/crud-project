@@ -30,7 +30,6 @@ function Home() {
   return (
     <>
       <main className={styles.home}>
-      <h1>Mes Tâches </h1>
       <Link to="/add" className={styles.addBtn}>+ Nouvelle Tâche</Link>
       {/* On passe les données à la liste via une "Prop" */}
       <TaskList tasks={tasks} />

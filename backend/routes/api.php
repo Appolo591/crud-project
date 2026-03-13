@@ -1,11 +1,14 @@
 <?php
 
+// On cache les erreurs pour ne pas casser le JSON, mais on les garde dans les logs
+error_reporting(0);
+ini_set('display_errors', 0);
+
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type, Authorization"); // Ajout de Authorization
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
 header("Content-Type: application/json");
 
-// Gestion du preflight OPTIONS pour CORS
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit;
 }
@@ -23,8 +26,8 @@ if (empty($token)) {
     exit;
 }
 
-// On cherche l'utilisateur dans la table users
-$userQuery = $conn->query("SELECT id FROM users WHERE token = '$token'");
+// ✅ FIX : On récupère l'ID ET le ROLE
+$userQuery = $conn->query("SELECT id, role FROM users WHERE token = '$token'");
 $user = $userQuery->fetch_assoc();
 
 if (!$user) {
@@ -33,59 +36,103 @@ if (!$user) {
     exit;
 }
 
-$userId = $user['id']; // Voici l'ID de celui qui est connecté
-// -----------------------------------------------------
+$userId = $user['id'];
+$userRole = $user['role'] ?? 'user'; 
 
 $method = $_SERVER['REQUEST_METHOD'];
+
 switch ($method) {
     case 'GET':
         if (isset($_GET['id'])) {
             $id = intval($_GET['id']);
-            // Sécurité : on vérifie que la tâche appartient bien à l'utilisateur
-            $sql = "SELECT * FROM tasks WHERE id = $id AND user_id = $userId";    
-            $result = $conn->query($sql);    
-            $task = $result->fetch_assoc();
+            $sql = ($userRole === 'admin') 
+                ? "SELECT * FROM tasks WHERE id = $id" 
+                : "SELECT * FROM tasks WHERE id = $id AND user_id = $userId";
             
-            if ($task) {
-                echo json_encode($task);
-            } else {
-                http_response_code(404);
-                echo json_encode(["message" => "Tâche non trouvée ou non autorisée"]);
-            }
+            $result = $conn->query($sql);
+            $task = $result->fetch_assoc();
+            if ($task) echo json_encode($task);
+            else { http_response_code(404); echo json_encode(["message" => "Introuvable"]); }
         } else {
-            // RÉCUPÉRER UNIQUEMENT SES TÂCHES
-            $sql = "SELECT * FROM tasks WHERE user_id = $userId";
+            $sql = ($userRole === 'admin') 
+                ? "SELECT tasks.*, users.username FROM tasks LEFT JOIN users ON tasks.user_id = users.id" 
+                : "SELECT * FROM tasks WHERE user_id = $userId";
             $result = $conn->query($sql);
             $tasks = [];
-            while ($row = $result->fetch_assoc()) {
-                $tasks[] = $row;
-            }
+            while ($row = $result->fetch_assoc()) { $tasks[] = $row; }
             echo json_encode($tasks);
         }
         break;
 
     case 'POST':
         $data = json_decode(file_get_contents('php://input'), true);
-
         $title = $conn->real_escape_string($data['title']);
         $description = $conn->real_escape_string($data['description'] ?? '');
-        $due_date = $conn->real_escape_string($data['due_date'] ?? null);
+        $due_date = !empty($data['due_date']) ? "'" . $conn->real_escape_string($data['due_date']) . "'" : "NULL";
         $status = $conn->real_escape_string($data['status'] ?? 'pending');
         $priority = $conn->real_escape_string($data['priority'] ?? 'normal');
 
-        // AJOUT DU user_id DANS L'INSERT
         $sql = "INSERT INTO tasks (user_id, title, description, due_date, status, priority) 
-                VALUES ($userId, '$title', '$description', '$due_date', '$status', '$priority')";
+                VALUES ($userId, '$title', '$description', $due_date, '$status', '$priority')";
         
+        if ($conn->query($sql)) echo json_encode(["message" => "Tâche créée"]);
+        else { http_response_code(500); echo json_encode(["error" => $conn->error]); }
+        break;
+
+    case 'PUT':
+        if (!isset($_GET['id'])) {
+            http_response_code(400);
+            echo json_encode(["message" => "ID manquant"]);
+            break;
+        }
+        $id = intval($_GET['id']);
+        $data = json_decode(file_get_contents('php://input'), true);
+        
+        $title = $conn->real_escape_string($data['title']);
+        $description = $conn->real_escape_string($data['description'] ?? '');
+        $due_date = !empty($data['due_date']) ? "'" . $conn->real_escape_string($data['due_date']) . "'" : "NULL";
+        $status = $conn->real_escape_string($data['status']);
+        $priority = $conn->real_escape_string($data['priority']);
+
+        $whereClause = ($userRole === 'admin') ? "WHERE id = $id" : "WHERE id = $id AND user_id = $userId";
+
+        $sql = "UPDATE tasks SET 
+                title = '$title', 
+                description = '$description', 
+                due_date = $due_date, 
+                status = '$status', 
+                priority = '$priority',
+                updated_at = NOW() 
+                $whereClause";
+
         if ($conn->query($sql)) {
-            echo json_encode(["message" => "Tâche créée", "id" => $conn->insert_id]);
+            echo json_encode(["message" => "Mise à jour réussie"]);
         } else {
             http_response_code(500);
             echo json_encode(["error" => $conn->error]);
         }
         break;
 
-    // ... Garde ton PUT et DELETE en ajoutant "AND user_id = $userId" dans les clauses WHERE
+    case 'DELETE':
+        if (isset($_GET['id'])) {
+            $id = intval($_GET['id']);
+            $whereClause = ($userRole === 'admin') ? "WHERE id = $id" : "WHERE id = $id AND user_id = $userId";
+            
+            $sql = "DELETE FROM tasks $whereClause";
+            
+            if ($conn->query($sql)) {
+                if ($conn->affected_rows > 0) {
+                    echo json_encode(["message" => "Supprimé"]);
+                } else {
+                    http_response_code(404);
+                    echo json_encode(["message" => "Tâche introuvable ou non autorisée"]);
+                }
+            } else {
+                http_response_code(500);
+                echo json_encode(["error" => $conn->error]);
+            }
+        }
+        break;
 }
 $conn->close();
 ?>

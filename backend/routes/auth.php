@@ -34,7 +34,7 @@ if ($method === 'POST') {
         $hashed_password = password_hash($plain_password, PASSWORD_BCRYPT);
 
         // 4. Insertion dans la base de données
-        $sql = "INSERT INTO users (username, password) VALUES ('$user', '$hashed_password')";
+        $sql = "INSERT INTO users (username, password , role) VALUES ('$user', '$hashed_password' , 'user')";
         
         if ($conn->query($sql)) {
             $newUserId = $conn->insert_id; // On récupère l'ID qui vient d'être créé
@@ -48,7 +48,8 @@ if ($method === 'POST') {
             echo json_encode([
                 "message" => "Compte créé et connecté !",
                 "token" => $token,
-                "username" => $user
+                "username" => $user,
+                "role" => "user"
         ]);
         } else {
             http_response_code(500);
@@ -69,6 +70,8 @@ if ($method === 'POST') {
             
             // Génération d'un token aléatoire
             $token = bin2hex(random_bytes(32));
+            $role = $userData['role'] ?? 'user';
+
             
             // On enregistre ce token en BDD pour ce user
             $conn->query("UPDATE users SET token = '$token' WHERE id = " . $userData['id']);
@@ -76,7 +79,8 @@ if ($method === 'POST') {
             echo json_encode([
                 "message" => "Connecté avec succès",
                 "token" => $token,
-                "username" => $userData['username']
+                "username" => $userData['username'],
+                "role" => $role 
             ]);
         } else {
             http_response_code(401);

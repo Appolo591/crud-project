@@ -6,6 +6,40 @@
   color: white;
 }
 
+.logo {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #4a90e2; /* Bleu dynamique */
+  text-decoration: none;
+  letter-spacing: -0.5px;
+  display: flex;
+  align-items: center;
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+/* Effet au survol du logo */
+.logo:hover {
+  color: #2c3e50; /* Devient plus sombre */
+  transform: scale(1.05); /* Grossit très légèrement */
+}
+
+/* Optionnel : Si tu veux mettre un point ou un symbole d'une autre couleur */
+.logo::after {
+  content: '.';
+  color: #e74c3c; /* Point rouge à la fin pour le style */
+  font-size: 1.8rem;
+}
+
+/* Conteneur de la Navbar pour bien espacer le logo du reste */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 5%;
+  background-color: #f7c4b3;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
 .welcome {
   margin-right: 15px;
   font-size: 0.9rem;

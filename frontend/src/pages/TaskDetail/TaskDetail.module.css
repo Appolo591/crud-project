@@ -1,0 +1,82 @@
+.headerActions {
+  margin-bottom: 30px;
+}
+
+.backLink {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  color: #7f8c8d; /* Gris doux */
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  padding: 8px 12px;
+  border-radius: 6px;
+  background-color: #f8f9fa;
+}
+
+.arrow {
+  margin-right: 8px;
+  transition: transform 0.3s ease;
+}
+
+/* Effets au survol */
+.backLink:hover {
+  color: #2c3e50; /* Plus sombre au survol */
+  background-color: #ecf0f1;
+}
+
+.backLink:hover .arrow {
+  transform: translateX(-5px); /* La flèche bouge vers la gauche */
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Base commune pour les deux boutons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none; /* Enlève le soulignement du Link */
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  font-family: inherit;
+}
+
+/* Bouton Modifier (Bleu) */
+.btnPrimary {
+  background-color: #3498db;
+  color: white;
+}
+
+.btnPrimary:hover {
+  background-color: #2980b9;
+  box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+}
+
+/* Bouton Supprimer (Rouge) */
+.btnDanger {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.btnDanger:hover {
+  background-color: #c0392b;
+  box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+}
+
+/* Effet au clic pour les deux */
+.btn:active {
+  transform: scale(0.96);
+}

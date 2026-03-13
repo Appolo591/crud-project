@@ -24,6 +24,7 @@ function Login() {
         // Succès : on stocke le token et le nom
         localStorage.setItem('userToken', data.token);
         localStorage.setItem('userName', data.username);
+        localStorage.setItem('userRole', data.role);
         navigate('/'); // Redirection vers l'accueil
       } else {
         setError(data.error || 'Erreur de connexion');

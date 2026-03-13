@@ -1,7 +1,7 @@
 function Footer(){
     return (
         <div>
-            <p>Footer </p>
+            <p>Projet React / PHP / Mysql </p>
         </div>
     );
 }

@@ -19,7 +19,7 @@ function Navbar() {
   return (
     <nav className={styles.navbar}>
       <div className={styles.logo}>
-        <Link to="/">MyTasks</Link>
+        <Link to="/">Mes Taches</Link>
       </div>
 
       <div className={styles.links}>
@@ -30,11 +30,7 @@ function Navbar() {
             <button onClick={handleLogout} className={styles.logoutBtn}>Déconnexion</button>
           </>
         ) : (
-          /* --- Affichage si DÉCONNECTÉ --- */
           <>
-            <Link to="/login">Connexion</Link>
-            <br />
-            <Link to="/register">Inscription</Link>
           </>
         )}
       </div>
