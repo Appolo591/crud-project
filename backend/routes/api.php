@@ -1,9 +1,5 @@
 <?php
 
-// On cache les erreurs pour ne pas casser le JSON, mais on les garde dans les logs
-error_reporting(0);
-ini_set('display_errors', 0);
-
 header("Access-Control-Allow-Origin: https://crud-project-three-alpha.vercel.app");
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
@@ -12,7 +8,11 @@ header("Content-Type: application/json");
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
     exit;
-}
+    }
+    
+    // On cache les erreurs pour ne pas casser le JSON, mais on les garde dans les logs
+    error_reporting(0);
+    ini_set('display_errors', 0);
 
 require_once __DIR__.'/../config/database.php';
 
