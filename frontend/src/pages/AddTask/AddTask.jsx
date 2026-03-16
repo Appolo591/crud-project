@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './AddTask.module.css';
-import { API_BASE_URL } from '../../config';
+import { API_BASE_URL } from '../../config/api.js';
 
 function AddTask() {
   const [title, setTitle] = useState('');

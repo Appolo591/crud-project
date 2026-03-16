@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import TaskList from '../../components/TaskList/TaskList';
 import styles from './Home.module.css';
 import { useNavigate, Link } from 'react-router-dom';
-import { API_BASE_URL } from '../../config';
+import { API_BASE_URL } from '../../config/api.js';
 
 function Home() {
   const [tasks, setTasks] = useState([]);

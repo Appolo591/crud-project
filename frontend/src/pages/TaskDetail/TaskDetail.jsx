@@ -1,7 +1,7 @@
 import { useParams, Link , useNavigate} from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import styles from './TaskDetail.module.css';
-import { API_BASE_URL } from '../../config';
+import { API_BASE_URL } from '../../config/api.js';
 
 function TaskDetail() {
   const { id } = useParams(); 

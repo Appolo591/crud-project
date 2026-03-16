@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import styles from './EditTask.module.css';
-import { API_BASE_URL } from '../../config';
+import { API_BASE_URL } from '../../config/api.js';
 
 function EditTask() {
   const { id } = useParams();
