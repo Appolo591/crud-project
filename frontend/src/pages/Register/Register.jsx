@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { API_BASE_URL } from '../../config';
 
 function Register() {
   const [username, setUsername] = useState('');
@@ -19,7 +20,7 @@ function Register() {
     }
 
     try {
-      const response = await fetch('http://localhost/crud-project/backend/routes/auth.php?action=register', {
+      const response = await fetch(`${API_BASE_URL }/auth.php?action=register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password }),

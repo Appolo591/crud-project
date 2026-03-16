@@ -2,6 +2,7 @@
 require_once __DIR__.'/../config/database.php';
 
 // 1. Headers indispensables pour React
+header("Access-Control-Allow-Origin: https://crud-project-three-alpha.vercel.app/");
 header("Content-Type: application/json");
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: POST,GET, OPTIONS");

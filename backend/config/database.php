@@ -17,7 +17,7 @@ function loadEnv($path) {
 }
 
 // On charge le fichier .env 
-loadEnv(__DIR__ . '/../.env');
+loadEnv(__DIR__ . '../.env');
 
 // On utilise les variables chargées pour la connexion
 $conn = new mysqli(

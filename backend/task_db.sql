@@ -1,6 +1,6 @@
-CREATE DATABASE task_db;
+-- CREATE DATABASE task_db;
 
-USE task_db;
+-- USE task_db;
 
 CREATE TABLE tasks (
     id INT AUTO_INCREMENT PRIMARY KEY,

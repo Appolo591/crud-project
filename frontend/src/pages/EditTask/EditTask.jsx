@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import styles from './EditTask.module.css';
+import { API_BASE_URL } from '../../config';
 
 function EditTask() {
   const { id } = useParams();
@@ -16,7 +17,7 @@ function EditTask() {
   // 1. Charger les données actuelles au chargement de la page
   useEffect(() => {
     const token = localStorage.getItem('userToken');
-    fetch(`http://localhost/crud-project/backend/routes/api.php?id=${id}`,{
+    fetch(`${API_BASE_URL }/api.php?id=${id}`,{
       headers: {'Authorization': `Bearer ${token}`}
     })
       .then(res => res.json())
@@ -36,7 +37,7 @@ function EditTask() {
     
     const updatedTask = { title, description, due_date: dueDate, priority, status };
 
-    fetch(`http://localhost/crud-project/backend/routes/api.php?id=${id}`, {
+    fetch(`${API_BASE_URL }/api.php?id=${id}`, {
       method: 'PUT', // Méthode de mise à jour
       headers: { 'Content-Type': 'application/json' ,
                 'Authorization': `Bearer ${token}`} , 

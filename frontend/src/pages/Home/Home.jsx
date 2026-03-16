@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import TaskList from '../../components/TaskList/TaskList';
 import styles from './Home.module.css';
 import { useNavigate, Link } from 'react-router-dom';
+import { API_BASE_URL } from '../../config';
 
 function Home() {
   const [tasks, setTasks] = useState([]);
@@ -16,7 +17,7 @@ function Home() {
     return;
     }
 
-    fetch('http://localhost/crud-project/backend/routes/api.php', {
+    fetch(`${API_BASE_URL }/api.php`, {
         headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'

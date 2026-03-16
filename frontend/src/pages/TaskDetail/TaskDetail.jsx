@@ -1,6 +1,7 @@
 import { useParams, Link , useNavigate} from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import styles from './TaskDetail.module.css';
+import { API_BASE_URL } from '../../config';
 
 function TaskDetail() {
   const { id } = useParams(); 
@@ -11,7 +12,7 @@ function TaskDetail() {
   useEffect(() => {
     const token = localStorage.getItem('userToken');
 
-    fetch(`http://localhost/crud-project/backend/routes/api.php?id=${id}`,{
+    fetch(`${API_BASE_URL }/api.php?id=${id}`,{
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`
@@ -30,7 +31,7 @@ function TaskDetail() {
         return;
     const token = localStorage.getItem('userToken');
     try{
-      const response = await fetch(`http://localhost/crud-project/backend/routes/api.php?id=${id}`, {
+      const response = await fetch(`${API_BASE_URL }/api.php?id=${id}`, {
         method: 'DELETE',
         headers: {'Authorization': `Bearer ${token}`}
       });

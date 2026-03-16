@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './AddTask.module.css';
+import { API_BASE_URL } from '../../config';
 
 function AddTask() {
   const [title, setTitle] = useState('');
@@ -24,7 +25,7 @@ function AddTask() {
     };
 
     // 2. Envoi avec le header Authorization
-    fetch('http://localhost/crud-project/backend/routes/api.php', {
+    fetch(`${API_BASE_URL }/api.php`, {
       method: 'POST',
       headers: { 
         'Content-Type': 'application/json',

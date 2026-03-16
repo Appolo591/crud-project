@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { API_BASE_URL } from '../../config';
 
 function Login() {
   const [username, setUsername] = useState('');
@@ -12,7 +13,7 @@ function Login() {
     setError('');
 
     try {
-      const response = await fetch('http://localhost/crud-project/backend/routes/auth.php?action=login', {
+      const response = await fetch(`${API_BASE_URL }/auth.php?action=login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password }),
