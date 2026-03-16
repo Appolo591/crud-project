@@ -1,0 +1,3 @@
+Header add Access-Control-Allow-Origin "https://crud-project-three-alpha.vercel.app"
+Header add Access-Control-Allow-Headers "Content-Type, Authorization"
+Header add Access-Control-Allow-Methods "GET, POST, OPTIONS, DELETE, PUT"

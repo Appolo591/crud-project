@@ -39,7 +39,7 @@ function Login() {
   return (
     <div style={{ maxWidth: '400px', margin: '50px auto', padding: '20px', border: '1px solid #ddd' }}>
       <h2>Connexion</h2>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+      {error && <p style={{ color: 'red' }}>{typeof error === 'object' ? JSON.stringify(error) : error}</p>}
       <form onSubmit={handleSubmit}>
         <div>
           <label>Nom d'utilisateur :</label>
