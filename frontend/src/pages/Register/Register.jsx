@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { API_BASE_URL } from '../../config/api.js';
+// import { API_BASE_URL } from '../../config/api.js';
 
 function Register() {
   const [username, setUsername] = useState('');
@@ -20,6 +20,9 @@ function Register() {
     }
 
     try {
+       
+        // Remplace temporairement par l'URL en dur pour tester
+        const API_BASE_URL = "https://mytasks.infinityfreeapp.com/backend/routes";
       const response = await fetch(`${API_BASE_URL }/auth.php?action=register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

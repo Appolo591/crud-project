@@ -3,7 +3,7 @@
 // 1. Headers indispensables pour React
 header("Access-Control-Allow-Origin: https://crud-project-three-alpha.vercel.app");
 header("Access-Control-Allow-Methods: POST,GET, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type");
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
 header("Content-Type: application/json");
 
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
@@ -13,7 +13,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 
 // Active l'affichage des erreurs pour le débug
 ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 require_once __DIR__.'/../config/database.php';
@@ -96,4 +95,8 @@ if ($method === 'POST') {
             echo json_encode(["error" => "Identifiants incorrects"]);
         }
     }
+}else {
+    // Si ce n'est pas du POST ou si l'action n'est pas login/register
+    http_response_code(404);
+    echo json_encode(["error" => "Action non reconnue ou methode incorrecte"]);
 }
